@@ -404,18 +404,17 @@ $$
 is a biased random walk
 
 
-## Density-dependent population growth | Stochastic Gompertz model
+## Density-dependent population growth | Discrete-time stochastic Gompertz model
 
 $$
-N_t = N_{t-1} \text{e}^{[u ~ + ~ (b - 1) \log(N_{t-1})]} \text{e}^{w_t} \\
-w_t \sim \text{N}(0,q)
+N_t = N_{t-1} ~ \underbrace{\exp(u ~ + ~ (b - 1) \log(N_{t-1}))}_{\substack{\text{rate of} \\ \text{change}}} \underbrace{\exp(w _t)}_{\substack{\text{stochastic} \\ \text{environment}}}
 $$
 
 
-## Density-dependent population growth | Stochastic Gompertz model
+## Density-dependent population growth | Discrete-time stochastic Gompertz model
 
 $$
-N_t = N_{t-1} \text{e}^{[u ~ + ~ (b - 1) \log(N_{t-1})]} \text{e}^{w_t}
+N_t = N_{t-1} ~ \exp(u ~ + ~ (b - 1) \log(N_{t-1})) \exp(w _t)
 $$
 
 <br>
@@ -432,7 +431,18 @@ x_t &= x_{t-1} + u + (b - 1) x_{t-1} + w_t \\
 \end{align}
 $$
 
-## Density-dependent population growth
+## Density-dependent population growth | Discrete-time stochastic Gompertz model
+
+We generally assume the process errors are Gaussian
+
+$$
+x_t = u + b x_{t-1} + w_t \\
+~ \\
+w_t \sim \text{N}(0, q)
+$$
+
+
+## Density-dependent population growth | Discrete-time stochastic Gompertz model
 
 What is the expectation of $x_t$?
 
@@ -441,7 +451,7 @@ x_t = u + b x_{t-1} + w_t
 $$
 
 
-## Density-dependent population growth
+## Density-dependent population growth | Discrete-time stochastic Gompertz model
 
 What is the expectation of $x_t$?
 
@@ -456,7 +466,7 @@ $$
 $$
 
 
-## Density-dependent population growth | Model fitting
+## Density-dependent population growth | Estimating parameters
 
 $$
 x_t = u + b x_{t-1} + w_t
@@ -536,6 +546,9 @@ plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf",
         ylab = expression(italic(x[t])~~or~~italic(y[t])))
 lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
 ```
+
+
+# Fitting models
 
 
 ## Fitting models with `MARSS()`
