@@ -1,0 +1,74 @@
+---
+title: "Introduction to state-space models in ecology"
+subtitle: "QERM 597"
+date: "22 February 2023"
+output:
+  html_document:
+    fig_caption: yes
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+```{r set_options, echo=FALSE, cache=FALSE}
+options(width = 100)
+```
+
+***
+
+## Instructor
+
+[__Mark Scheuerell__](https://fish.uw.edu/faculty/mark-scheuerell/)  
+_School of Aquatic and Fishery Sciences_  
+_Unversity of Washington_
+
+***
+
+## Information
+
+Links are included after each topic for both the knitted slide deck (`.html`) and the RMarkdown code (`.Rmd`) used to generate them. Here's how to navigate through a slide deck:
+
+* Use the arrow keys (&#8592;/&#8594;) on your keyboard to go forward or backward
+
+* Press the "o" key on any slide to show you an overview of the slide deck
+
+* In overview mode, click on a slide or press "esc" to zoom in on it
+
+* You can also print the slides to a pdf by selecting the "print" option from your browser's File menu.
+
+*** 
+
+## Background
+
+Here is some background material for those who want a primer on some introductory concepts.
+
+  * Characteristics, autocorrelation, cross-correlation | [slides](background/intro.html) | [Rmd](background/intro.Rmd)  
+  
+  * White noise, random walks and biased random walks | [slides](background/WN_RW.html) | [Rmd](background/WN_RW.Rmd)  
+  
+ * Backshift and Difference operators | [slides](background/ts_operators.html) | [Rmd](docs/background/ts_operators.Rmd)
+ 
+  * AR(_p_), MA(_q_), ARMA(_p_,_q_) models | [slides](background/ARMA_models.html) | [Rmd](background/ARMA_models.Rmd)  
+
+ * Identifying stationary AR(_p_) models | [slides](background/stationary_AR.html) | [Rmd](docs/background/stationary_AR.Rmd)
+ 
+ * Invertible MA(_q_) models | [slides](background/invertible_MA.html) | [Rmd](docs/background/invertible_MA.Rmd)
+
+***
+
+## Topics
+
+Here are the topics we'll try to cover today. 
+
+  * Univariate state-space models | [slides](topics/SSM.html) | [Rmd](topics/SSM.Rmd)   
+  
+  * Regression with autocorrelated errors | [slides](topics/regr_ar1.html) | [Rmd](topics/regr_ar1.Rmd)
+  
+***
+
+## Other resources
+
+ * Holmes, Scheuerell & Ward (2021) [Applied Time Series Analysis for Fisheries and Environmental Sciences](https://atsa-es.github.io/atsa-labs/)
+ 
+ * [FISH 550 - Applied Time Series Analysis](https://atsa-es.github.io/)
