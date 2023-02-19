@@ -4,11 +4,9 @@
 
 ### 22 February 2023
 
-***
+<br>
 
-### [**Mark Scheuerell**](https://fish.uw.edu/faculty/mark-scheuerell/)
-
-### School of Aquatic and Fishery Sciences
-
-### University of Washington
+#### [**Mark Scheuerell**](https://fish.uw.edu/faculty/mark-scheuerell/)  
+#### School of Aquatic and Fishery Sciences  
+#### University of Washington
 
