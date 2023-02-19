@@ -88,6 +88,21 @@ Some of the extrinsic drivers may be unknown
 In time series modeling, we often call these unknown extrinsic factors _process errors_
 
 
+## Observation (sampling) errors
+
+Consider for a moment the very act of collecting data
+
+Information gathered depends on many factors
+
+* Environmental conditions (eg, turbidity, currents)
+
+* Behavior (eg, vertical migration, threat avoidance)
+
+* Demographics (age, sex, maturity)
+
+* Sampling design/coverage
+
+
 ## Part 2: Observation model
 
 __Data = Truth + Error__
@@ -126,21 +141,6 @@ text("Time", x=cc/2, y=-ss/2, xpd=NA, pos=1, cex=2)
 ```
 
 
-## Observation (sampling) errors
-
-Consider for a moment the very act of collecting data
-
-Information gathered depends on many factors
-
-* Environmental conditions (eg, turbidity, currents)
-
-* Behavior (eg, vertical migration, threat avoidance)
-
-* Demographics (age, sex, maturity)
-
-* Sampling design/coverage
-
-
 ## Consider these data
 
 ```{r}
@@ -160,14 +160,12 @@ yy <- xx + ee
 
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(yy, ylim = range(xx,yy),
-        lwd = 2, type = "o", pch = 16, cex = 1.5, col = "blue",
-        ylab = expression(italic(y[t])))
+        lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870",
+        las = 1, ylab = expression(italic(y[t])))
 ```
 
 
-## Model options
-
-__Linear regression__
+## Model options | Linear regression
 
 State model
 
@@ -188,9 +186,9 @@ theta <- coef(lm(yy ~ seq(TT)))
 y_obs <- theta[1] + theta[2] * seq(TT)
 
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16,  cex = 1.5, col = "blue",
-        ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(y_obs, lwd = 2, type = "o", pch = 16, col = "gray")
+plot.ts(yy, lwd = 2, type = "o", pch = 16,  cex = 1.5, col = "#844870",
+        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(y_obs, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 ```
 
 All of the variance in $y_t$ is due to observation error
@@ -200,18 +198,16 @@ All of the variance in $y_t$ is due to observation error
 
 ```{r}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16,  cex = 1.5, col = "blue",
-        ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(y_obs, lwd = 2, type = "o", pch = 16, col = "gray")
+plot.ts(yy, lwd = 2, type = "o", pch = 16,  cex = 1.5, col = "#844870",
+        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(y_obs, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 segments(seq(TT), y0 = y_obs, y1 = yy, col = "red")
 ```
 
 Errors $v_t = y_t - x_t$
 
 
-## Model options
-
-__Biased random walk__
+## Model options | Biased random walk
 
 State model
 
@@ -230,9 +226,9 @@ $$
 
 ```{r}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "blue",
-        ylab = expression(italic(y[t])))
-lines(yy, lwd = 2, type = "o", pch = 16, col = "gray")
+plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870",
+        las = 1, ylab = expression(italic(y[t])))
+lines(yy, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 ```
 
 All of the variance in $y_t$ is due to process error
@@ -242,18 +238,16 @@ All of the variance in $y_t$ is due to process error
 
 ```{r}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "blue",
-        ylab = expression(italic(y[t])))
-lines(yy, lwd = 2, type = "o", pch = 16, col = "gray")
+plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870",
+        las = 1, ylab = expression(italic(y[t])))
+lines(yy, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 segments(seq(2,TT), y0 = yy[-TT], y1 = yy[-1], col = "red")
 ```
 
 Errors: $w_t = y_t - y_{t-1}$
 
 
-## Model options
-
-__Biased random walk with observation error__
+## Model options | Biased random walk with observation error
 
 State model
 
@@ -278,9 +272,33 @@ xw[,1] <- c(1, rep(seq(2, TT), ea = 2), TT+1)
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 ## blank slate
 plot.ts(yy, ylim = range(xx,yy), type = "n",
-        ylab = expression(italic(x[t])))
+        las = 1, ylab = expression(italic(x[t])))
 lines(xw[,1], xw[,2], lwd = 2, col = "gray")
-lines(xx, lwd = 2, type = "o", pch = 16, col = "black")
+lines(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf")
+```
+
+
+## Biased random walk
+
+```{r}
+par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
+## blank slate
+plot.ts(yy, ylim = range(xx,yy), type = "n",
+        las = 1, ylab = expression(italic(x[t])))
+## lines(xw[,1], xw[,2], type = "o", pch = 16, lwd = 2, col = "gray")
+lines(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf")
+```
+
+
+## Biased random walk with obs error
+
+```{r}
+par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
+plot.ts(yy, type = "n",
+        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf")
+lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
+segments(seq(TT), y0 = xx, y1 = yy, col = "red")
 ```
 
 
@@ -290,24 +308,14 @@ lines(xx, lwd = 2, type = "o", pch = 16, col = "black")
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 ## blank slate
 plot.ts(yy, ylim = range(xx,yy), type = "n",
-        ylab = expression(italic(x[t])~~or~~italic(y[t])))
+        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
 lines(xw[,1], xw[,2], lwd = 2, col = "gray")
-lines(xx, lwd = 2, type = "o", pch = 16, col = "black")
+lines(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 segments(seq(TT), y0 = xx, y1 = yy, col = "red")
-lines(yy, lwd = 2, type = "o", pch = 16, col = "blue", cex = 1.5)
+lines(yy, lwd = 2, type = "o", pch = 16, col = "#844870", cex = 1.5)
 ```
 
 The variance in $y_t$ is due to both process & observation error
-
-
-## Biased random walk with obs error
-
-```{r}
-par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "blue",
-        ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(xx, lwd = 2, type = "o", pch = 16, col = "gray")
-```
 
 
 ## Separating process & obs errors
@@ -345,64 +353,116 @@ for(i in 1:3) {
 ```
 
 
-## Density-dependent population growth
-
-Stochastic Gompertz model
-
-$$
-N_t = N_{t-1} \text{e}^{(r_{max} + (b - 1) \log(N_{t-1}))} \text{e}^{w_t}  ~ \text{with} ~ w_t \sim \text{N}(0,q)
-$$
+# Population growth
 
 
-## Density-dependent population growth
-
-Stochastic Gompertz model
+## Density-independent popn growth | Exponential growth/decline in continuous time
 
 $$
-N_t = N_{t-1} \text{e}^{(r_{max} + (b - 1) \log(N_{t-1}))} \text{e}^{w_t}  ~ \text{with} ~ w_t \sim \text{N}(0,r)
+N(t) = N_0 ~ \underbrace{\exp(u)}_{\substack{\text{rate of} \\ \text{change}}} \underbrace{\exp(w t)}_{\substack{\text{stochastic} \\ \text{environment}}}
 $$
+
+
+## Density-independent popn growth | In discrete time, with a time step of 1 year
+
+$$
+N_t = N_{t-1} \exp(u + w_t)
+$$
+
+
+## Density-independent popn growth | In discrete time, with a time step of 1 year
+
+$$
+N_t = N_{t-1} \exp(u + w_t)
+$$
+
+<br>
+
+Taking the log of both sides and substituting $x_t$ for $\log(N_t)$
+
+$$
+\log (N_t) = \log (N_{t-1}) + u + w_t \\
+\Downarrow \\
+x_t = x_{t-1} + u + w_t
+$$
+
+
+## Density-independent popn growth | Biased random walk
+
+If we assume that the errors are white noise
+
+$$
+w_t \sim \text{N}(0, q)
+$$
+
+then our model of populations dynamics
+
+$$
+x_t = x_{t-1} + u + w_t
+$$
+
+is a biased random walk
+
+
+## Density-dependent population growth | Stochastic Gompertz model
+
+$$
+N_t = N_{t-1} \text{e}^{[u ~ + ~ (b - 1) \log(N_{t-1})]} \text{e}^{w_t} \\
+w_t \sim \text{N}(0,q)
+$$
+
+
+## Density-dependent population growth | Stochastic Gompertz model
+
+$$
+N_t = N_{t-1} \text{e}^{[u ~ + ~ (b - 1) \log(N_{t-1})]} \text{e}^{w_t}
+$$
+
+<br>
 
 Taking the log of both sides and substituting $x_t$ for $\log(N_t)$
 
 $$
 \begin{align}
-\log(N_t) & = \log(N_{t-1}) + r_{max} + (b - 1) \log(N_{t-1}) + w_t \\
+\log(N_t) & = \log(N_{t-1}) + u + (b - 1) \log(N_{t-1}) + w_t \\
 & \Downarrow \\
-x_t &= x_{t-1} + r_{max} + (b - 1) x_{t-1} + w_t \\
-    &= x_{t-1} + r_{max} + b x_{t-1} - x_{t-1} + w_t \\
-    &= r_{max} + b x_{t-1} + w_t
+x_t &= x_{t-1} + u + (b - 1) x_{t-1} + w_t \\
+    &= x_{t-1} + u + b x_{t-1} - x_{t-1} + w_t \\
+    &= u + b x_{t-1} + w_t
 \end{align}
 $$
 
 ## Density-dependent population growth
 
-What is the mean of $\{x_t\}$?
+What is the expectation of $x_t$?
 
 $$
-x_t = r_{max} + b x_{t-1} + w_t
-$$
-
-
-## Density-dependent population growth
-
-What is the mean of $\{x_t\}$?
-
-$$
-x_t = r_{max} + b x_{t-1} + w_t
-$$
-
-$$
-\text{E}(x_t) = \frac{r_{max}}{1 - b}
+x_t = u + b x_{t-1} + w_t
 $$
 
 
 ## Density-dependent population growth
 
+What is the expectation of $x_t$?
+
 $$
-x_t = r_{max} + b x_{t-1} + w_t
+x_t = u + b x_{t-1} + w_t
 $$
 
-It turns out that $r_{max}$ and $b$ are confounded and create a likelihood surface with a strong ridge
+<br>
+
+$$
+\text{E}(x_t) = \frac{u}{1 - b}
+$$
+
+
+## Density-dependent population growth | Model fitting
+
+$$
+x_t = u + b x_{t-1} + w_t
+$$
+
+It turns out that $u$ and $b$ are confounded and create a likelihood surface with a strong ridge
 
 This means we need a _long_ time series or mulitple observations of the process 
 
@@ -429,7 +489,7 @@ Simulate the AR(1) state model
 
 ```{r, echo=TRUE}
 ## number of time steps
-TT <- 50
+TT <- 30
 ## strength of density-dependence (0 < b < 1)
 bb <- 0.5
 ## time series of process errors with SD = 1
@@ -455,26 +515,26 @@ yy <- xx + vv
 ```
 
 
-## Plot a random walk
+## Plot log-population size over time
 
 Plot the state and observation
 
 ```{r, echo=TRUE, eval=FALSE}
-plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "gray",
-        ylim = c(min(xx,yy), max(xx,yy)),
+plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf",
+        las = 1, ylim = c(min(xx,yy), max(xx,yy)),
         ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(yy, lwd = 2, type = "o", pch = 16, col = "blue")
+lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
 ```
 
 
-## Plot a random walk
+## Log-population size over time
 
 ```{r, align.fig="center"}
 par(mai = c(0.8,0.8,0,0), omi = c(0,0,0,0))
-plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "gray",
-        ylim = c(min(xx,yy), max(xx,yy)),
+plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf",
+        las = 1, ylim = c(min(xx,yy), max(xx,yy)),
         ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(yy, lwd = 2, type = "o", pch = 16, col = "blue")
+lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
 ```
 
 
@@ -569,7 +629,7 @@ mod_fit <- MARSS(y = dat, model = mod_list)
 ```
 
 
-## Fitting models with `MARSS()`
+## Fitting models with `MARSS()` {.smaller}
 
 ```{r, echo=FALSE, eval=TRUE}
 ## load MARSS package
@@ -629,8 +689,8 @@ yy <- xy + DD * dd # + ee
 
 par(mai = c(0.9,0.9,0.5,0.1), omi = c(0,0,0,0))
 plot.ts(xx, ylim = range(xx,yy),
-        lwd = 2, type = "o", pch = 16, col = "gray",
-        ylab = expression(italic(x[t])~~or~~italic(y[t])))
+        lwd = 2, type = "o", pch = 16, col = "#488fdf",
+        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
 mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(C)~italic(c[t])~+~italic(w[t])),
       line = 0.5, adj = 0)
 ```
@@ -641,12 +701,12 @@ mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(C)~it
 ```{r}
 par(mai = c(0.9,0.9,0.5,0.1), omi = c(0,0,0,0))
 plot.ts(xx, ylim = range(xx,yy),
-        lwd = 2, type = "o", pch = 16, col = "gray",
-        ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "blue")
-mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(w[t])),
-      line = 1.5, adj = 0)
+        lwd = 2, type = "o", pch = 16, col = "#488fdf",
+        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
 mtext(side = 3, expression(italic(y[t])==italic(x[t])~+~italic(D)~italic(d[t])),
+      line = 1.5, adj = 0)
+mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(C)~italic(c[t])~+~italic(w[t])),
       line = 0.5, adj = 0)
 ```
 
