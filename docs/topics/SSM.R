@@ -1,5 +1,5 @@
 ## ----setup, include=FALSE-----------------------------------------------------------------------------
-set.seed(597)
+set.seed(206)
 
 
 ## ----ex_bias_rw---------------------------------------------------------------------------------------
@@ -181,8 +181,8 @@ for(i in 1:3) {
 ## number of time steps
 TT <- 40
 ## bias term
-uu <- 0.3
-## time series of process errors with SD = 1
+uu <- 0.2
+## time series of process errors with var = 1
 ww <- rnorm(TT, 0, sqrt(1))
 ## initialize state & set x0 = w0
 xx <- ww
@@ -193,8 +193,8 @@ for(t in 2:TT) {
 
 
 ## ----rw_obs_error, echo=TRUE--------------------------------------------------------------------------
-## obs errors with var = 0.5
-vv <- rnorm(TT, 0, sqrt(0.5))
+## obs errors with var = 0.3
+vv <- rnorm(TT, 0, sqrt(0.3))
 ## obs data
 yy <- xx + vv
 

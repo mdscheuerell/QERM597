@@ -9,7 +9,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-set.seed(597)
+set.seed(206)
 ```
 
 ## Topics
@@ -469,8 +469,8 @@ is a biased random walk
 ## number of time steps
 TT <- 40
 ## bias term
-uu <- 0.3
-## time series of process errors with SD = 1
+uu <- 0.2
+## time series of process errors with var = 1
 ww <- rnorm(TT, 0, sqrt(1))
 ## initialize state & set x0 = w0
 xx <- ww
@@ -486,8 +486,8 @@ for(t in 2:TT) {
 Add some observation error
 
 ```{r rw_obs_error, echo=TRUE}
-## obs errors with var = 0.5
-vv <- rnorm(TT, 0, sqrt(0.5))
+## obs errors with var = 0.3
+vv <- rnorm(TT, 0, sqrt(0.3))
 ## obs data
 yy <- xx + vv
 ```
@@ -625,62 +625,6 @@ library(MARSS)
 dat <- matrix(yy, nrow = 1, ncol = TT)
 ## fit the model
 mod_fit <- MARSS(y = dat, model = mod_list)
-```
-
-
-## Examining model fits in detail {.smaller}
-
-```{r brw_MARSS_output_detail_NLL, eval = FALSE, echo = TRUE}
-## Success! abstol and log-log tests passed at 61 iterations.
-## Alert: conv.test.slope.tol is 0.5.
-## Test with smaller values (<0.1) to ensure convergence.
-## 
-## MARSS fit is
-## Estimation method: kem 
-## Convergence test: conv.test.slope.tol = 0.5, abstol = 0.001
-## Estimation converged in 61 iterations. 
-### <b>
-## Log-likelihood: -68.66275 
-## AIC: 145.3255   AICc: 146.4684   
-### </b>
-##  
-##       Estimate
-## R.r     0.4893
-## U.u     0.0313
-## Q.q     0.9798
-## x0.x0   0.5812
-## Initial states (x0) defined at t=0
-## 
-## Standard errors have not been calculated. 
-## Use MARSSparamCIs to compute CIs and bias estimates.
-```
-
-
-## Examining model fits in detail {.smaller}
-
-```{r brw_MARSS_output_detail_pars, eval = FALSE, echo = TRUE}
-## Success! abstol and log-log tests passed at 61 iterations.
-## Alert: conv.test.slope.tol is 0.5.
-## Test with smaller values (<0.1) to ensure convergence.
-## 
-## MARSS fit is
-## Estimation method: kem 
-## Convergence test: conv.test.slope.tol = 0.5, abstol = 0.001
-## Estimation converged in 61 iterations. 
-## Log-likelihood: -68.66275 
-## AIC: 145.3255   AICc: 146.4684   
-##  
-### <b>
-##       Estimate
-## R.r     0.4893
-## U.u     0.0313
-## Q.q     0.9798
-## x0.x0   0.5812
-## Initial states (x0) defined at t=0
-### </b>
-## 
-## Standard errors have not been calculated. 
-## Use MARSSparamCIs to compute CIs and bias estimates.
 ```
 
 
