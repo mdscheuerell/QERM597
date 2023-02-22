@@ -32,7 +32,7 @@ Consist of 2 parts
 
 Describes the __true state of nature__ over time
 
-```{r, fig.height=4, fig.width=8, out.height="100%", out.width="100%", fig.align='center'}
+```{r state_model, fig.height=4, fig.width=8, out.height="100%", out.width="100%", fig.align='center'}
 par(mai=c(0.8,0.8,0,0), omi=rep(0,4))
 ## boundaries
 ss <- 5
@@ -145,9 +145,7 @@ text("Time", x=cc/2, y=-ss/2, xpd=NA, pos=1, cex=2)
 
 ## Consider these data
 
-```{r}
-set.seed(211)
-
+```{r ex_bias_rw}
 TT <- 30
 
 uu <- -0.2
@@ -183,12 +181,13 @@ $$
 
 ## Linear regression
 
-```{r}
+```{r linear_regr}
 theta <- coef(lm(yy ~ seq(TT)))
 y_obs <- theta[1] + theta[2] * seq(TT)
 
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16,  cex = 1.5, col = "#844870",
+plot.ts(yy, lwd = 2, type = "o", pch = 16, ylim = range(yy, y_obs), 
+        cex = 1.5, col = "#844870",
         las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
 lines(y_obs, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 ```
@@ -198,9 +197,10 @@ All of the variance in $y_t$ is due to observation error
 
 ## Observation errors
 
-```{r}
+```{r regr_errors}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
-plot.ts(yy, lwd = 2, type = "o", pch = 16,  cex = 1.5, col = "#844870",
+plot.ts(yy, lwd = 2, type = "o", pch = 16, ylim = range(yy, y_obs),  
+        cex = 1.5, col = "#844870",
         las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
 lines(y_obs, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 segments(seq(TT), y0 = y_obs, y1 = yy, col = "red")
@@ -226,7 +226,7 @@ $$
 
 ## Biased random walk
 
-```{r}
+```{r biased_rw_fit}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870",
         las = 1, ylab = expression(italic(y[t])))
@@ -238,7 +238,7 @@ All of the variance in $y_t$ is due to process error
 
 ## Process errors
 
-```{r}
+```{r biased_rw_errors}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870",
         las = 1, ylab = expression(italic(y[t])))
@@ -266,10 +266,10 @@ $$
 
 ## Biased random walk
 
-```{r}
+```{r brw_states_obs}
 xw <- rbind(cbind(seq(TT), xx), cbind(seq(TT)+0.5, xx+uu))
 xw <- xw[order(xw[,1]),]
-xw[,1] <- c(1, rep(seq(2, TT), ea = 2), TT+1)
+xw[,1] <- c(1, rep(seq(2, TT), ea = 2), TT)
   
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 ## blank slate
@@ -282,7 +282,7 @@ lines(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 
 ## Biased random walk
 
-```{r}
+```{r brw_states_obs_2}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 ## blank slate
 plot.ts(yy, ylim = range(xx,yy), type = "n",
@@ -294,7 +294,7 @@ lines(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf")
 
 ## Biased random walk with obs error
 
-```{r}
+```{r brw_states_obs_errors}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 plot.ts(yy, type = "n",
         las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
@@ -306,7 +306,7 @@ segments(seq(TT), y0 = xx, y1 = yy, col = "red")
 
 ## Biased random walk with obs error
 
-```{r}
+```{r brw_states_obs_errors_2}
 par(mai = c(0.9,0.9,0.1,0.1), omi = c(0,0,0,0))
 ## blank slate
 plot.ts(yy, ylim = range(xx,yy), type = "n",
@@ -329,7 +329,7 @@ They have different temporal patterns
 
 ## Separating process & obs errors
 
-```{r, fig.align="center"}
+```{r ex_proc_obs_errors, fig.align="center"}
 xp <- matrix(NA, TT, 3)
 xp[1,] <- c(0,0,0)
 
@@ -1059,7 +1059,7 @@ $$
 
 ## Covariates in state-space models
 
-```{r}
+```{r states_covars}
 ww <- xx <- xy <- rnorm(TT)
 
 bb <- 0.7
