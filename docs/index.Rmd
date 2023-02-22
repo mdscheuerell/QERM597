@@ -67,6 +67,13 @@ Here are the topics we'll try to cover today.
   
 ***
 
+## Code
+
+You can find the standalone **R** code for the in-class exercises [here](topics/SSM.R).
+
+
+***
+
 ## Other resources
 
  * Holmes, Scheuerell & Ward (2021) [Applied Time Series Analysis for Fisheries and Environmental Sciences](https://atsa-es.github.io/atsa-labs/)
