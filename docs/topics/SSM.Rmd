@@ -412,7 +412,7 @@ is a biased random walk
 ## number of time steps
 TT <- 40
 ## bias term
-uu <- 0.2
+uu <- 0.3
 ## time series of process errors with SD = 1
 ww <- rnorm(TT, 0, sqrt(1))
 ## initialize state & set x0 = w0
@@ -621,6 +621,83 @@ mod_fit <- MARSS(y = dat, model = mod_list)
 ```
 
 
+## Extracting fitted model
+
+Fitted values are stored in a $1 \times T$ matrix (vector) accessed with `$states`
+
+Standard errors of fitted values are stored in a $1 \times T$ matrix (vector) accessed with `$states.se`
+
+```{r, echo = TRUE, eval = TRUE}
+## T x 1 (transposed) vector of states
+mod_fits <- t(mod_fit$states)
+
+## T x 1 (transposed) vector of SE's
+mod_fits_SE <- t(mod_fit$states.se)
+```
+
+
+## Approximate confidence intervals
+
+We can estimate a $(1 - \alpha/2)\%$ confidence interval as
+
+$$
+\hat{x} ~ \pm ~ t_{1 - \alpha/2} \times \text{SE}(\hat{x})
+$$
+
+
+## Approximate confidence intervals
+
+```{r brw_CI, eval = TRUE, echo = TRUE}
+## upper 95% CI
+mod_fits_CI_hi <- mod_fits + qt(p = 0.975, df = TT - 1) * mod_fits_SE
+
+## lower 95% CI
+mod_fits_CI_lo <- mod_fits - qt(p = 0.975, df = TT - 1) * mod_fits_SE
+```
+
+
+## Plot the model fit
+
+Plot the state and observation
+
+```{r rw_plot_fit_code, echo=TRUE, eval=FALSE}
+plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf",
+        las = 1, ylim = c(min(xx,yy), max(xx,yy)),
+        ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
+lines(mod_fits, lwd = 2, type = "l", cex = 1.5, col = "black")
+lines(mod_fits_CI_hi, lwd = 2, type = "l", cex = 1.5, col = "gray")
+lines(mod_fits_CI_lo, lwd = 2, type = "l", cex = 1.5, col = "gray")
+```
+
+
+## Plot the model fit
+
+```{r rw_plot_fit, align.fig="center"}
+par(mai = c(0.8,0.8,0,0), omi = c(0,0,0,0))
+plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf",
+        las = 1, ylim = c(min(xx,yy), max(xx,yy)),
+        ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
+lines(mod_fits, lwd = 2, type = "l", cex = 1.5, col = "black")
+lines(mod_fits_CI_hi, lwd = 2, type = "l", cex = 1.5, col = "gray")
+lines(mod_fits_CI_lo, lwd = 2, type = "l", cex = 1.5, col = "gray")
+```
+
+
+## Plot the model fit without true state
+
+```{r rw_plot_fit_nostate, align.fig="center"}
+par(mai = c(0.8,0.8,0,0), omi = c(0,0,0,0))
+plot.ts(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870",
+        las = 1, ylim = c(min(xx,yy), max(xx,yy)),
+        ylab = expression(italic(x[t])~~or~~italic(y[t])))
+lines(mod_fits, lwd = 2, type = "l", cex = 1.5, col = "black")
+lines(mod_fits_CI_hi, lwd = 2, type = "l", cex = 1.5, col = "gray")
+lines(mod_fits_CI_lo, lwd = 2, type = "l", cex = 1.5, col = "gray")
+```
+
+
 ## Evidence for bias
 
 Q: Is there data support for the bias term?
@@ -778,7 +855,7 @@ for(t in 2:TT) {
 
 Add some observation error
 
-```{r, echo=TRUE}
+```{r gomp_obs_error, echo=TRUE}
 ## obs errors with var = 0.5
 vv <- rnorm(TT, 0, sqrt(0.5))
 ## obs data
@@ -800,7 +877,7 @@ lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
 
 ## Log-population size over time
 
-```{r, align.fig="center"}
+```{r gomp_plot, align.fig="center"}
 par(mai = c(0.8,0.8,0,0), omi = c(0,0,0,0))
 plot.ts(xx, lwd = 2, type = "o", pch = 16, col = "#488fdf",
         las = 1, ylim = c(min(xx,yy), max(xx,yy)),
@@ -814,31 +891,7 @@ lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
 
 ## Fitting models with `MARSS()`
 
-We can use the __{MARSS}__ pkg for R to fit state-space models
-
-To do so, we must write the model out just as we would on a white board
-
-
-## Fitting models with `MARSS()`
-
-Here are the main function arguments
-
-```{r, echo=TRUE, eval=FALSE}
-MARSS(y, model = NULL, inits = NULL, control = NULL, ...)
-```
-
-* `y` is an $n \times T$ `matrix` of data (observations)
-
-* `model` is a `list` that defines the state-space model
-
-* `inits` is an optional `list` of initial values
-
-* `control` is an optional `list` of control parameters
-
-
-## Fitting models with `MARSS()`
-
-`MARSS()` uses a slightly expanded form of state-space model, such that
+Recall that `MARSS()` uses an expanded form of state-space model, such that
 
 $$
 \begin{align}
@@ -862,7 +915,7 @@ $$
 
 `MARSS()` works on matrices, so we have to define any scalar as a $1 \times 1$ matrix
 
-```{r, echo=TRUE}
+```{r gomp_model, echo=TRUE}
 mod_list <- list(
   ## state model
   B = matrix("b"), U = matrix(0), Q = matrix("q"),
@@ -893,9 +946,7 @@ $$
 
 We can ignore the `inits` and `control` arguments for now and fit the model
 
-```{r, echo=TRUE, eval=FALSE}
-## load MARSS package
-library(MARSS)
+```{r, echo = TRUE, eval = FALSE}
 ## define the data as an N (rows) x T (cols) matrix
 dat <- matrix(yy, nrow = 1, ncol = TT)
 ## fit the model
@@ -905,9 +956,7 @@ mod_fit <- MARSS(y = dat, model = mod_list)
 
 ## Fitting models with `MARSS()` {.smaller}
 
-```{r, echo=FALSE, eval=TRUE}
-## load MARSS package
-library(MARSS)
+```{r gomp_fit, echo = FALSE, eval = TRUE}
 ## define the data as an N (rows) x T (cols) matrix
 dat <- matrix(yy, nrow = 1, ncol = TT)
 ## fit the model
@@ -971,11 +1020,14 @@ mod_fit <- MARSS(y = dat, model = mod_list)
 ```
 
 
+# Covariates in state-space models
 
 
 ## Covariates in state-space models
 
-We can include covariates (explanatory variables) in our models as well
+We can include covariates (explanatory variables) as well
+
+<br>
 
 Covariates in the state model _affect the underlying process_
 
@@ -986,13 +1038,17 @@ $$
 
 ## Covariates in state-space models
 
-We can include covariates (explanatory variables) in our models as well
+We can include covariates (explanatory variables) as well
+
+<br>
 
 Covariates in the state model _affect the underlying process_
 
 $$
 x_t = b x_{t-1} + C c_t + w_t
 $$
+
+<br>
 
 Covariates in the observation model are _offsets to the underlying process_
 
@@ -1022,25 +1078,25 @@ yy <- xy + DD * dd # + ee
 par(mai = c(0.9,0.9,0.5,0.1), omi = c(0,0,0,0))
 plot.ts(xx, ylim = range(xx,yy),
         lwd = 2, type = "o", pch = 16, col = "#488fdf",
-        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
+        las = 1, ylab = expression(italic(x[t])))
 mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(C)~italic(c[t])~+~italic(w[t])),
       line = 0.5, adj = 0)
 ```
 
 
-## Covariates in state-space models
+<!-- ## Covariates in state-space models -->
 
-```{r}
-par(mai = c(0.9,0.9,0.5,0.1), omi = c(0,0,0,0))
-plot.ts(xx, ylim = range(xx,yy),
-        lwd = 2, type = "o", pch = 16, col = "#488fdf",
-        las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t])))
-lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870")
-mtext(side = 3, expression(italic(y[t])==italic(x[t])~+~italic(D)~italic(d[t])),
-      line = 1.5, adj = 0)
-mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(C)~italic(c[t])~+~italic(w[t])),
-      line = 0.5, adj = 0)
-```
+<!-- ```{r} -->
+<!-- par(mai = c(0.9,0.9,0.5,0.1), omi = c(0,0,0,0)) -->
+<!-- plot.ts(xx, ylim = range(xx,yy), -->
+<!--         lwd = 2, type = "o", pch = 16, col = "#488fdf", -->
+<!--         las = 1, ylab = expression(italic(x[t])~~or~~italic(y[t]))) -->
+<!-- lines(yy, lwd = 2, type = "o", pch = 16, cex = 1.5, col = "#844870") -->
+<!-- mtext(side = 3, expression(italic(y[t])==italic(x[t])~+~italic(D)~italic(d[t])), -->
+<!--       line = 1.5, adj = 0) -->
+<!-- mtext(side = 3, expression(italic(x[t])==italic(b)~italic(x[t-1])~+~italic(C)~italic(c[t])~+~italic(w[t])), -->
+<!--       line = 0.5, adj = 0) -->
+<!-- ``` -->
 
 
 
