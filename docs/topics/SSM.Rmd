@@ -628,6 +628,41 @@ mod_fit <- MARSS(y = dat, model = mod_list)
 ```
 
 
+## A note on model fitting
+
+When we have 2+ observations of process, our estimates of model parameters are much more accurate and precise.
+
+$$
+\begin{align}
+x_t &= x_{t-1} + u + w_t ~~ \text{with} ~ w_t \sim \text{N}(0,q) \\
+~ \\
+\begin{bmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{bmatrix}_t
+&=
+\begin{bmatrix}
+1 \\
+1 \\
+\vdots \\
+1
+\end{bmatrix}
+x_t + 
+\begin{bmatrix}
+v_1 \\
+v_2 \\
+\vdots \\
+v_n
+\end{bmatrix}_t
+~~ \text{with} ~
+\mathbf{v_t} \sim \text{MVN}(\mathbf{0},\mathbf{R})
+\end{align}
+$$
+
+
+
 ## Extracting fitted model objects
 
 Fitted values are stored in an $N \times T$ matrix (here $N = 1$) accessed with `$states`
