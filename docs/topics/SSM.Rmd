@@ -813,7 +813,7 @@ $$
 For populations under _negative_ effects of density dependence, we require 
 
 $$
-1 < b < 1
+-1 < b < 1
 $$
 
 
